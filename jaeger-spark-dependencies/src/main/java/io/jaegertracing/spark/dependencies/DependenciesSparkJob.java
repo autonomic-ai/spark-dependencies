@@ -18,13 +18,14 @@ import io.jaegertracing.spark.dependencies.elastic.ElasticsearchDependenciesJob;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class DependenciesSparkJob {
 
-  public static void main(String[] args) throws UnsupportedEncodingException {
+  public static void main(String[] args) throws UnsupportedEncodingException, UnknownHostException {
     String storage = System.getenv("STORAGE");
     if (storage == null) {
       throw new IllegalArgumentException("Missing environmental variable STORAGE");
@@ -40,7 +41,8 @@ public final class DependenciesSparkJob {
     run(storage, date);
   }
 
-  private static void run(String storage, LocalDate localDate) throws UnsupportedEncodingException {
+  private static void run(String storage, LocalDate localDate) throws UnsupportedEncodingException,
+                                                                      UnknownHostException {
     String peerServiceTag = System.getenv("PEER_SERVICE_TAG");
     if (peerServiceTag == null){
       peerServiceTag = "peer.service";
