@@ -18,6 +18,7 @@ import io.jaegertracing.Tracer;
 import io.jaegertracing.spark.dependencies.test.DependenciesTest;
 import io.jaegertracing.spark.dependencies.test.TracersGenerator;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,7 +67,7 @@ public class ElasticsearchDependenciesJobTest extends DependenciesTest {
   }
 
   @Override
-  protected void deriveDependencies() {
+  protected void deriveDependencies() throws UnknownHostException {
     dependenciesJob = ElasticsearchDependenciesJob.builder()
         .nodes("http://" + jaegerElasticsearchEnvironment.getElasticsearchIPPort())
         .day(LocalDate.now())
