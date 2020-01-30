@@ -20,6 +20,8 @@ import io.jaegertracing.spark.dependencies.DependenciesSparkHelper;
 import io.jaegertracing.spark.dependencies.Utils;
 import io.jaegertracing.spark.dependencies.model.Dependency;
 import io.jaegertracing.spark.dependencies.model.Span;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -47,7 +49,7 @@ public class ElasticsearchDependenciesJob {
   private static final Logger log = LoggerFactory.getLogger(ElasticsearchDependenciesJob.class);
   private static final Pattern PORT_PATTERN = Pattern.compile(":\\d+");
 
-  public static Builder builder() {
+  public static Builder builder() throws UnknownHostException {
     return new Builder();
   }
 
@@ -62,7 +64,9 @@ public class ElasticsearchDependenciesJob {
 
     final Map<String, String> sparkProperties = new LinkedHashMap<>();
 
-    Builder() {
+    Builder() throws UnknownHostException {
+      sparkProperties.put("spark.driver.host", InetAddress.getLocalHost().getHostAddress());
+      log.info("local address: {}", InetAddress.getLocalHost().getHostAddress());
       sparkProperties.put("spark.ui.enabled", "false");
       // don't die if there are no spans
       sparkProperties.put("es.index.read.missing.as.empty", "true");
